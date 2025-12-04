@@ -3,7 +3,7 @@ package skipset
 import (
 	"testing"
 
-	"github.com/zhangyunhao116/fastrand"
+	rand "math/rand/v2"
 )
 
 func TestRangeFrom(t *testing.T) {
@@ -15,7 +15,7 @@ func TestRangeFrom(t *testing.T) {
 	}
 
 	// s := []int64{-3, -1, 1, 2, 4, 6}
-	checkRangeFrom(t, NewInt64(), fastrand.Int63(), []int64{})
+	checkRangeFrom(t, NewInt64(), rand.Int64(), []int64{})
 	checkRangeFrom(t, s, -5, []int64{-3, -1, 1, 2, 4, 6})
 	checkRangeFrom(t, s, -4, []int64{-3, -1, 1, 2, 4, 6})
 	checkRangeFrom(t, s, -3, []int64{-3, -1, 1, 2, 4, 6})
@@ -32,7 +32,7 @@ func TestRangeFrom(t *testing.T) {
 	checkRangeFrom(t, s, 100000, []int64{})
 
 	// sr := []int64{6, 4, 2, 1, -1, -3}
-	checkRangeFrom(t, NewInt64Desc(), fastrand.Int63(), []int64{})
+	checkRangeFrom(t, NewInt64Desc(), rand.Int64(), []int64{})
 	checkRangeFrom(t, sd, -5, []int64{})
 	checkRangeFrom(t, sd, -4, []int64{})
 	checkRangeFrom(t, sd, -3, []int64{-3})
@@ -53,7 +53,7 @@ func TestRangeFrom(t *testing.T) {
 	case1len := 1000
 	case1 := make([]int64, case1len)
 	for i := int64(0); i < int64(case1len); i++ {
-		v := fastrand.Int63()
+		v := rand.Int64()
 		case1[i] = v
 		s.Add(v)
 	}

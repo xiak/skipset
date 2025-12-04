@@ -1,17 +1,16 @@
 package skipset
 
 import (
-	"math"
 	"sync"
 	"testing"
 
-	"github.com/zhangyunhao116/fastrand"
+	rand "math/rand/v2"
 )
 
-const (
-	initsize = 1 << 10 // for `contains` `1Remove9Add90Contains` `1Range9Remove90Add900Contains`
-	randN    = math.MaxUint32
-)
+func Int63() int64 {
+	// EQ
+	return int64(rand.Uint64() & (1<<63 - 1))
+}
 
 func BenchmarkInt64(b *testing.B) {
 	all := []benchTask[int64]{{
@@ -28,7 +27,7 @@ func BenchmarkInt64(b *testing.B) {
 		name: "sync.Map", New: func() anyskipset[int64] {
 			return new(anySyncMap[int64])
 		}})
-	rng := fastrand.Int63
+	rng := Int63
 	benchAdd(b, rng, all)
 	bench30Add70Contains(b, rng, all)
 	bench1Remove9Add90Contains(b, rng, all)
@@ -56,7 +55,7 @@ func bench30Add70Contains[T any](b *testing.B, rng func() T, benchTasks []benchT
 			b.ResetTimer()
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					u := fastrand.Uint32n(10)
+					u := rand.Uint32N(10)
 					if u < 3 {
 						s.Add(rng())
 					} else {
@@ -75,7 +74,7 @@ func bench1Remove9Add90Contains[T any](b *testing.B, rng func() T, benchTasks []
 			b.ResetTimer()
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					u := fastrand.Uint32n(100)
+					u := rand.Uint32N(100)
 					if u < 9 {
 						s.Add(rng())
 					} else if u == 10 {
@@ -96,7 +95,7 @@ func bench1Range9Remove90Add900Contains[T any](b *testing.B, rng func() T, bench
 			b.ResetTimer()
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					u := fastrand.Uint32n(1000)
+					u := rand.Uint32N(1000)
 					if u == 0 {
 						s.Range(func(score T) bool {
 							return true

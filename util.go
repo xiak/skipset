@@ -1,7 +1,7 @@
 package skipset
 
 import (
-	"github.com/zhangyunhao116/fastrand"
+	rand "math/rand/v2"
 )
 
 const (
@@ -12,7 +12,7 @@ const (
 
 func randomLevel() int {
 	level := 1
-	for fastrand.Uint32n(1/p) == 0 {
+	for rand.Uint32N(1/p) == 0 {
 		level++
 	}
 	if level > maxLevel {

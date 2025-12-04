@@ -1,10 +1,9 @@
 package skipset
 
 import (
+	rand "math/rand/v2"
 	"testing"
 	"unsafe"
-
-	"github.com/zhangyunhao116/fastrand"
 )
 
 type dummy struct {
@@ -29,13 +28,13 @@ func TestOpArray(t *testing.T) {
 	}
 
 	for i := 0; i < 1000; i++ {
-		r := int(fastrand.Uint32n(maxLevel))
+		r := int(rand.Uint32N(maxLevel))
 		value := unsafe.Pointer(&dummy{})
 		if i%100 == 0 {
 			value = nil
 		}
 		array[r] = value
-		if fastrand.Uint32n(2) == 0 {
+		if rand.Uint32N(2) == 0 {
 			n.data.store(r, value)
 		} else {
 			n.data.atomicStore(r, value)

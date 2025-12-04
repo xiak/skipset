@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/zhangyunhao116/fastrand"
+	rand "math/rand/v2"
 )
 
 func TestOrdered(t *testing.T) {
@@ -162,7 +162,7 @@ func testIntSet(t *testing.T, newset func() anyskipset[int]) {
 		testArray[i] = int(i)
 	}
 	for i := len(testArray) - 1; i > 0; i-- { // Fisher–Yates shuffle
-		j := fastrand.Uint32n(uint32(i + 1))
+		j := rand.Uint32N(uint32(i + 1))
 		testArray[i], testArray[j] = testArray[j], testArray[i]
 	}
 
@@ -222,13 +222,13 @@ func testIntSet(t *testing.T, newset func() anyskipset[int]) {
 	for i := 0; i < 1<<16; i++ {
 		wg.Add(1)
 		go func() {
-			r := fastrand.Uint32n(num)
+			r := rand.Uint32N(num)
 			if r < 333 {
-				l.Add(int(fastrand.Uint32n(smallRndN)) + 1)
+				l.Add(int(rand.Uint32N(smallRndN)) + 1)
 			} else if r < 666 {
-				l.Contains(int(fastrand.Uint32n(smallRndN)) + 1)
+				l.Contains(int(rand.Uint32N(smallRndN)) + 1)
 			} else if r != 999 {
-				l.Remove(int(fastrand.Uint32n(smallRndN)) + 1)
+				l.Remove(int(rand.Uint32N(smallRndN)) + 1)
 			} else {
 				var pre int
 				l.Range(func(score int) bool {
@@ -285,12 +285,12 @@ func testIntSet(t *testing.T, newset func() anyskipset[int]) {
 		wg.Add(1)
 		go func() {
 			for i := 0; i < 1000; i++ {
-				if fastrand.Uint32n(2) == 0 {
-					if x.Remove(int(fastrand.Uint32n(10))) {
+				if rand.Uint32N(2) == 0 {
+					if x.Remove(int(rand.Uint32N(10))) {
 						atomic.AddUint64(&removecount, 1)
 					}
 				} else {
-					if x.Add(int(fastrand.Uint32n(10))) {
+					if x.Add(int(rand.Uint32N(10))) {
 						atomic.AddUint64(&addcount, 1)
 					}
 				}
@@ -322,8 +322,8 @@ func testIntSet(t *testing.T, newset func() anyskipset[int]) {
 	for i := 0; i <= 10000; i++ {
 		wg.Add(1)
 		go func() {
-			if fastrand.Uint32n(2) == 0 {
-				r := fastrand.Uint32()
+			if rand.Uint32N(2) == 0 {
+				r := rand.Uint32()
 				s1.Add(int(r))
 				s2.Store(int(r), nil)
 			} else {

@@ -1,5 +1,4 @@
-module github.com/zhangyunhao116/skipset
+module github.com/xiak/skipset
 
-go 1.18
+go 1.25
 
-require github.com/zhangyunhao116/fastrand v0.2.1
